@@ -1,0 +1,83 @@
+package com.yb.cheung.modules.bss.entity;
+
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.io.Serializable;
+import java.util.Date;
+import lombok.Data;
+import com.yb.cheung.common.base.BaseEntity;
+
+/**
+ * 业务微信信息
+ * 
+ * @author pangfucheung
+ * @email pangfucheung@163.com
+ * @date 2019-12-02 00:33:59
+ */
+@Data
+@TableName("bss_wechat")
+public class BssWechat extends BaseEntity {
+
+	/**
+	 * 父id 
+	 */
+	private String parentId;
+	
+	/**
+	 * 微信号 
+	 */
+	@ExcelProperty(value="微信号",index=0)
+	private String wechatCode;
+	
+	/**
+	 * 客服名称 
+	 */
+	@ExcelProperty(value="客服名称",index=1)
+	private String customName;
+	
+	/**
+	 * 手机号 
+	 */
+	@ExcelProperty(value="手机号",index=2)
+	private String phoneNumber;
+	
+	/**
+	 * QQ号 
+	 */
+	@ExcelProperty(value="QQ号",index=3)
+	private String qqNumber;
+
+	/**
+	 * 好友上限 
+	 */
+	@ExcelProperty(value="好友上限",index=4)
+	private Integer friendLimit;
+	
+	/**
+	 * 二维码URL 
+	 */
+	@ExcelProperty(value="二维码URL",index=5)
+	private String qrCodeUrl;
+	
+	/**
+	 * 下线原因 
+	 */
+	@ExcelProperty(value="下线原因",index=6)
+	private String offlineReason;
+
+	/**
+	 * 品牌id
+	 */
+	@TableField(exist = false)
+	private String bssBrandId;
+
+	/**
+	 * 品牌名称
+	 */
+	@TableField(exist = false)
+	private String bssBrandName;
+
+}

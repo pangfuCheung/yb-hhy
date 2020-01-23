@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yb.cheung.modules.sys.dao.SysMenuDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.yb.cheung.modules.sys.entity.SysMenu" id="sysMenuMap">
+        <result property="uuid" column="uuid"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="url" column="url"/>
+        <result property="perms" column="perms"/>
+        <result property="icon" column="icon"/>
+        <result property="type" column="type"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="status"/>
+        <result property="companyId" column="company_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="creatorId" column="creator_id"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="operatorId" column="operator_id"/>
+    </resultMap>
+
+    <select id="findAllMenusByCurrentUser" resultType="com.yb.cheung.modules.sys.entity.SysMenu">
+        SELECT
+          sm.*
+        FROM
+          sys_menu sm
+        LEFT JOIN sys_role_menu srm ON sm.uuid = srm.menu_id
+        LEFT JOIN sys_role sr ON sr.uuid = srm.role_id
+        LEFT JOIN sys_user_role sur ON sur.role_id = sr.uuid
+        LEFT JOIN sys_user su ON su.uuid = sur.user_id
+        WHERE
+          sur.user_id =#{userId}
+    </select>
+
+</mapper>

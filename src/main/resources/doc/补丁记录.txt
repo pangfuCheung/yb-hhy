@@ -1,0 +1,36 @@
+2019-12-29
+业务微信信息 --
+  1./yb-cheung/bss/bsswechat/delete 删除报500
+  2./yb-cheung/bss/bsswechat/update 修改报500
+业务品牌信息 --
+  1. /yb-cheung/bss/bssbrand/delete 删除报500
+  2. /yb-cheung/bss/bssbrand/update 修改报500
+业务广告信息 --
+  1. /yb-cheung/bss/bssad/delete 删除报500
+业务渠道信息 --
+  1. /yb-cheung/bss/bsschannel/save 保存报500
+
+-------------------------------- 20191230 完结 ------------------------
+1.修改问题，菜单去重问题，当一个用户拥有多个角色时，菜单重复，根据菜单的uuid去重即可
+2.广告渠道问题，release这个为mysql的关键字，不能使用该字段名，改为releaseCode
+
+菜单重叠
+业务操作日志信息 --
+  1. 无数据，无法操作删除
+
+2019-12-29
+业务微信信息 --
+  1./yb-cheung/bss/bsswechat/delete 删除报500
+  2./yb-cheung/bss/bsswechat/update 修改报500
+业务品牌信息 --
+  1. /yb-cheung/bss/bssbrand/delete 删除报500
+  2. /yb-cheung/bss/bssbrand/update 修改报500
+业务广告信息 --
+  1. /yb-cheung/bss/bssad/delete 删除报500
+业务渠道信息 --
+  1. /yb-cheung/bss/bsschannel/save 保存报500
+菜单重叠
+业务操作日志信息 --
+  1. 无数据，无法操作删除
+
+
