@@ -19,6 +19,8 @@ public interface BssWechatService extends IService<BssWechat> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    List<BssWechat> listByParams(Map<String,Object> params);
+
 
     /**
      * 更新或者保存

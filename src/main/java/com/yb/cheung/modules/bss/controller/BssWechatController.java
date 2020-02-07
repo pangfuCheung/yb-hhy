@@ -2,18 +2,23 @@ package com.yb.cheung.modules.bss.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.ExcelBuilder;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.WriteWorkbook;
 import com.yb.cheung.common.annotation.SysLog;
+import com.yb.cheung.common.utils.DateUtils;
 import com.yb.cheung.common.utils.UpAndDownLoadUtils;
 import com.yb.cheung.modules.bss.excel.listener.BssWechatListener;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +37,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -183,11 +190,11 @@ public class BssWechatController extends BaseController {
     }
 
     /**
-     * 上传微信二维码
+     * 根据excel模板批量上传
      */
     @ApiOperation(value = "根据excel模板批量上传",httpMethod = "POST")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "MultipartFile ",value = "图片文件" ,required = true , dataType = "MultipartFile" ,paramType = "body")
+            @ApiImplicitParam(name = "MultipartFile ",value = "excel文件" ,required = true , dataType = "MultipartFile" ,paramType = "body")
     })
     @PostMapping("/upload_excel")
     @SysLog("根据excel模板批量上传")
@@ -198,6 +205,47 @@ public class BssWechatController extends BaseController {
         }
         return R.ok();
     }
+
+    /**
+     * 导出所有微信号
+     */
+    @ApiOperation(value = "导出所有微信号",httpMethod = "POST")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "MultipartFile ",value = "excel文件" ,required = true , dataType = "MultipartFile" ,paramType = "body")
+    })
+    @GetMapping("/download_excel")
+    @SysLog("导出所有微信号")
+    public R downloadExcel(@YBRequestParam Map<String,Object> params , HttpServletRequest request , HttpServletResponse response) throws IOException{
+        // 获取模板excel
+        String excelPath = ClassUtils.getDefaultClassLoader().getResource("").getPath().replaceAll("/","\\\\") + "static\\template\\weixin.xlsx";
+
+        // 获取数据
+        List<BssWechat> bssWechats = bssWechatService.listByParams(params);
+
+        // 创建模板
+        ServletOutputStream out = response.getOutputStream();
+        WriteWorkbook writeWorkbook = new WriteWorkbook();
+        writeWorkbook.setTemplateFile(new File(excelPath));
+        writeWorkbook.setOutputStream(out);
+
+        ExcelWriter excelWriter = new ExcelWriter(writeWorkbook);
+        String fileName = "微信号-" + DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);
+        WriteSheet sheet = new WriteSheet();
+        sheet.setClazz(BssWechat.class);
+        //设置自适应宽度
+        sheet.setAutomaticMergeHead(Boolean.TRUE);
+        // 第一个 sheet 名称
+        //sheet.setSheetName("第一个sheet");
+        excelWriter.write(bssWechats,sheet);
+        // 通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
+        response.setHeader("Content-disposition", "attachment;filename=" + new String( fileName.getBytes("utf-8"), "utf-8" ) + ".xlsx");
+        excelWriter.finish();
+        response.setContentType("multipart/form-data");
+        response.setCharacterEncoding("utf-8");
+        out.flush();
+        return R.ok();
+    }
+
 
     /**
      * 根据字典的code获取子节点的值
@@ -218,7 +266,6 @@ public class BssWechatController extends BaseController {
     public R listByBrand(@YBRequestParam String brandId){
         return R.ok(bssWechatService.listByBrandId(brandId));
     }
-
 
 
 }

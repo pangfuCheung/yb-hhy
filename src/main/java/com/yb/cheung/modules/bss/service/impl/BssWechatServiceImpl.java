@@ -45,6 +45,11 @@ public class BssWechatServiceImpl extends ServiceImpl<BssWechatDao, BssWechat> i
     }
 
     @Override
+    public List<BssWechat> listByParams(Map<String, Object> params) {
+        return this.baseMapper.selectList(QW.getQW(params,BssWechat.class));
+    }
+
+    @Override
     @BssMethodLog(remark = "新增业务微信信息")
     public void insert(BssWechat bssWechat) {
         save(bssWechat);

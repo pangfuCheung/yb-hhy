@@ -1,5 +1,6 @@
 package com.yb.cheung.common.base;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yb.cheung.common.utils.Constant;
@@ -16,27 +17,32 @@ public class BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId
+    @ExcelIgnore
     private String uuid;
 
     /**
      * 状态 -1:删除 0:无效 1:有效
      */
+    @ExcelIgnore
     private Integer status;
 
     /**
      * 公司id
      */
+    @ExcelIgnore
     private String companyId;
 
     /**
      * 创建人id
      */
+    @ExcelIgnore
     private String creatorId;
 
     /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ExcelIgnore
     private Date createTime;
 
     /**

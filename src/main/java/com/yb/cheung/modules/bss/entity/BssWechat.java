@@ -1,5 +1,6 @@
 package com.yb.cheung.modules.bss.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -24,6 +25,7 @@ public class BssWechat extends BaseEntity {
 	/**
 	 * 父id 
 	 */
+	@ExcelIgnore
 	private String parentId;
 	
 	/**

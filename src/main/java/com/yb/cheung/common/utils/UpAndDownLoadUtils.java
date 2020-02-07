@@ -78,7 +78,7 @@ public class UpAndDownLoadUtils {
         return request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
     }
 
-    private String getRealPath(HttpServletRequest request){
+    public String getRealPath(HttpServletRequest request){
         //return "D:\\tomcat\\";
         //System.out.println(request.getSession().getServletContext().getRealPath("/").replace("\\", "/"));
         return request.getSession().getServletContext().getRealPath("/").replace("\\", "/");
