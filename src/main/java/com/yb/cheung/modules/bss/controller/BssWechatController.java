@@ -2,6 +2,7 @@ package com.yb.cheung.modules.bss.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.*;
 
 import cn.hutool.poi.excel.ExcelUtil;
@@ -224,27 +225,15 @@ public class BssWechatController extends BaseController {
         WriteWorkbook writeWorkbook = new WriteWorkbook();
 
         // 获取模板excel
-        String fileName = DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);
-        String excelPath = ClassUtils.getDefaultClassLoader().getResource("").getPath().replaceAll("/","\\\\") + "static\\template\\excel.xlsx";
-        File excFile =  new File(excelPath);
-        writeWorkbook.setTemplateFile(excFile);
-        writeWorkbook.setOutputStream(out);
-        ExcelWriter excelWriter = new ExcelWriter(writeWorkbook);
-        WriteSheet sheet = new WriteSheet();
-        sheet.setClazz(BssWechat.class);
-        //设置自适应宽度
-        sheet.setAutomaticMergeHead(Boolean.TRUE);
-        // 第一个 sheet 名称
-        //sheet.setSheetName("第一个sheet");
-        excelWriter.write(bssWechats,sheet);
-
-        //EasyExcel.write(fileName, BssWechat.class).sheet("模板").doWrite(bssWechats);
-        // 通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
-        response.setHeader("Content-disposition", "attachment;filename=" + new String( fileName.getBytes("utf-8"), "utf-8" ) + ".xlsx");
-        excelWriter.finish();
-        response.setContentType("multipart/form-data");
+        //String fileName = DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);
+        //String excelPath = ClassUtils.getDefaultClassLoader().getResource("").getPath().replaceAll("/","\\\\") + "static\\template\\excel.xlsx";
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
-        out.flush();
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        String fileName = DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);//URLEncoder.encode("", "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(), BssWechat.class).sheet("模板").doWrite(bssWechats);
 
         return R.ok();
     }
