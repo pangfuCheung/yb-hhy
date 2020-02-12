@@ -216,20 +216,20 @@ public class BssWechatController extends BaseController {
     @GetMapping("/download_excel")
     @SysLog("导出所有微信号")
     public R downloadExcel(@YBRequestParam Map<String,Object> params , HttpServletRequest request , HttpServletResponse response) throws IOException{
-        // 获取模板excel
-        String excelPath = ClassUtils.getDefaultClassLoader().getResource("").getPath().replaceAll("/","\\\\") + "static\\template\\weixin.xlsx";
-
         // 获取数据
         List<BssWechat> bssWechats = bssWechatService.listByParams(params);
 
         // 创建模板
         ServletOutputStream out = response.getOutputStream();
         WriteWorkbook writeWorkbook = new WriteWorkbook();
-        writeWorkbook.setTemplateFile(new File(excelPath));
-        writeWorkbook.setOutputStream(out);
 
+        // 获取模板excel
+        String fileName = DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);
+        String excelPath = ClassUtils.getDefaultClassLoader().getResource("").getPath().replaceAll("/","\\\\") + "static\\template\\excel.xlsx";
+        File excFile =  new File(excelPath);
+        writeWorkbook.setTemplateFile(excFile);
+        writeWorkbook.setOutputStream(out);
         ExcelWriter excelWriter = new ExcelWriter(writeWorkbook);
-        String fileName = "微信号-" + DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);
         WriteSheet sheet = new WriteSheet();
         sheet.setClazz(BssWechat.class);
         //设置自适应宽度
@@ -237,12 +237,15 @@ public class BssWechatController extends BaseController {
         // 第一个 sheet 名称
         //sheet.setSheetName("第一个sheet");
         excelWriter.write(bssWechats,sheet);
+
+        //EasyExcel.write(fileName, BssWechat.class).sheet("模板").doWrite(bssWechats);
         // 通知浏览器以附件的形式下载处理，设置返回头要注意文件名有中文
         response.setHeader("Content-disposition", "attachment;filename=" + new String( fileName.getBytes("utf-8"), "utf-8" ) + ".xlsx");
         excelWriter.finish();
         response.setContentType("multipart/form-data");
         response.setCharacterEncoding("utf-8");
         out.flush();
+
         return R.ok();
     }
 

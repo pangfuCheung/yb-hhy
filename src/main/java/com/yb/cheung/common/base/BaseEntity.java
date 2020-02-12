@@ -48,11 +48,13 @@ public class BaseEntity implements Serializable {
     /**
      * 更新人id
      */
+    @ExcelIgnore
     private String operatorId;
 
     /**
      * 更新时间
      */
+    @ExcelIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 

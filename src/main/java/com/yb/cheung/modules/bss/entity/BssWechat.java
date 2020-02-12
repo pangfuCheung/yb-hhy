@@ -73,12 +73,14 @@ public class BssWechat extends BaseEntity {
 	/**
 	 * 品牌id
 	 */
+	@ExcelIgnore
 	@TableField(exist = false)
 	private String bssBrandId;
 
 	/**
 	 * 品牌名称
 	 */
+	@ExcelIgnore
 	@TableField(exist = false)
 	private String bssBrandName;
 
