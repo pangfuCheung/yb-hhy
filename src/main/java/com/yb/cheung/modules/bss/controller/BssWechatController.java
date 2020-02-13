@@ -225,16 +225,12 @@ public class BssWechatController extends BaseController {
         WriteWorkbook writeWorkbook = new WriteWorkbook();
 
         // 获取模板excel
-        //String fileName = DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);
-        //String excelPath = ClassUtils.getDefaultClassLoader().getResource("").getPath().replaceAll("/","\\\\") + "static\\template\\excel.xlsx";
-        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         response.setContentType("application/vnd.ms-excel");
         response.setCharacterEncoding("utf-8");
         // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
-        String fileName = DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN);//URLEncoder.encode("", "UTF-8");
+        String fileName = URLEncoder.encode("微信号-" + DateUtils.format(new Date(),DateUtils.DATE_TIME_PATTERN), "UTF-8");//
         response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
         EasyExcel.write(response.getOutputStream(), BssWechat.class).sheet("模板").doWrite(bssWechats);
-
         return R.ok();
     }
 
@@ -245,8 +241,15 @@ public class BssWechatController extends BaseController {
     @ApiOperation(value = "获取微信模板",httpMethod = "GET")
     @GetMapping("/get_template")
     @SysLog("获取微信模板")
-    public Object getTemplate(HttpServletRequest request)throws IOException{
-        return new UpAndDownLoadUtils().downLoad(request,"weixin.xlsx");
+    public Object getTemplate(HttpServletResponse response)throws IOException{
+        // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
+        response.setContentType("application/vnd.ms-excel");
+        response.setCharacterEncoding("utf-8");
+        // 这里URLEncoder.encode可以防止中文乱码 当然和easyexcel没有关系
+        String fileName = URLEncoder.encode("微信上传模板", "UTF-8");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName + ".xlsx");
+        EasyExcel.write(response.getOutputStream(), BssWechat.class).sheet("模板").doWrite(new ArrayList<BssWechat>());
+        return R.ok();
     }
 
     /**

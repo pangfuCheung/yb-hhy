@@ -21,6 +21,8 @@ import com.yb.cheung.common.utils.R;
 import com.yb.cheung.common.base.BaseController;
 import com.yb.cheung.common.annotation.YBRequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * 渠道微信号分析统计
