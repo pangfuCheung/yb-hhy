@@ -38,7 +38,7 @@ public class BssWechatServiceImpl extends ServiceImpl<BssWechatDao, BssWechat> i
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssWechat> page = this.page(
                 new Query<BssWechat>().getPage(params),
-                new QueryWrapper<BssWechat>()
+                QW.getQW(params,BssWechat.class,true)
         );
 
         return new PageUtils(page);

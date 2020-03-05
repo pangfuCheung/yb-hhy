@@ -40,7 +40,7 @@ public class BssChannelServiceImpl extends ServiceImpl<BssChannelDao, BssChannel
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssChannel> page = this.page(
                 new Query<BssChannel>().getPage(params),
-                new QueryWrapper<BssChannel>()
+                QW.getQW(params,BssChannel.class,true)
         );
 
         List<BssChannel> bssChannels = page.getRecords();

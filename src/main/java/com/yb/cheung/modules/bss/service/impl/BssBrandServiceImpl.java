@@ -1,5 +1,6 @@
 package com.yb.cheung.modules.bss.service.impl;
 
+import com.yb.cheung.common.utils.QW;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class BssBrandServiceImpl extends ServiceImpl<BssBrandDao, BssBrand> impl
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssBrand> page = this.page(
                 new Query<BssBrand>().getPage(params),
-                new QueryWrapper<BssBrand>()
+                QW.getQW(params,BssBrand.class,true)
         );
 
         return new PageUtils(page);

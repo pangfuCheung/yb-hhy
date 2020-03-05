@@ -1,5 +1,6 @@
 package com.yb.cheung.modules.bss.service.impl;
 
+import com.yb.cheung.common.utils.QW;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -24,7 +25,7 @@ public class BssAdServiceImpl extends ServiceImpl<BssAdDao, BssAd> implements Bs
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssAd> page = this.page(
                 new Query<BssAd>().getPage(params),
-                new QueryWrapper<BssAd>()
+                QW.getQW(params,BssAd.class,true)
         );
 
         return new PageUtils(page);

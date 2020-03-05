@@ -1,5 +1,6 @@
 package com.yb.cheung.modules.bss.service.impl;
 
+import com.yb.cheung.common.utils.QW;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class BssChannelStatisticsServiceImpl extends ServiceImpl<BssChannelStati
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssChannelStatistics> page = this.page(
                 new Query<BssChannelStatistics>().getPage(params),
-                new QueryWrapper<BssChannelStatistics>()
+                QW.getQW(params,BssChannelStatistics.class,true)
         );
 
         return new PageUtils(page);

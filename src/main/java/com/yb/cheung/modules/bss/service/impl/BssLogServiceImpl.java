@@ -1,5 +1,6 @@
 package com.yb.cheung.modules.bss.service.impl;
 
+import com.yb.cheung.common.utils.QW;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class BssLogServiceImpl extends ServiceImpl<BssLogDao, BssLog> implements
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssLog> page = this.page(
                 new Query<BssLog>().getPage(params),
-                new QueryWrapper<BssLog>()
+                QW.getQW(params,BssLog.class,true)
         );
 
         return new PageUtils(page);
