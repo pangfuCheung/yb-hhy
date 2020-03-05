@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.yb.cheung.common.annotation.KeyWord;
 import lombok.Data;
 import com.yb.cheung.common.base.BaseEntity;
 
@@ -30,11 +31,13 @@ public class BssChannel extends BaseEntity {
 	/**
 	 * 渠道ID 
 	 */
+	@KeyWord
 	private String adId;
 	
 	/**
 	 * 渠道名称 
 	 */
+	@KeyWord
 	private String adName;
 
 	/**
@@ -45,6 +48,7 @@ public class BssChannel extends BaseEntity {
 	/**
 	 * 投放人名称 
 	 */
+	@KeyWord
 	private String opName;
 	
 	/**

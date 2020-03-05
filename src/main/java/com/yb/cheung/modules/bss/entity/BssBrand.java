@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.yb.cheung.common.annotation.KeyWord;
 import lombok.Data;
 import com.yb.cheung.common.base.BaseEntity;
 
@@ -22,11 +24,13 @@ public class BssBrand extends BaseEntity {
 	/**
 	 * 品牌名称 
 	 */
+	@KeyWord
 	private String name;
 	
 	/**
 	 * 品牌备注 
 	 */
+	@KeyWord
 	private String remark;
 	
 }

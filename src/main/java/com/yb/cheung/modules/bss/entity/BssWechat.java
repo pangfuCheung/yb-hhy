@@ -8,6 +8,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.yb.cheung.common.annotation.KeyWord;
 import lombok.Data;
 import com.yb.cheung.common.base.BaseEntity;
 
@@ -32,24 +34,28 @@ public class BssWechat extends BaseEntity {
 	 * 微信号 
 	 */
 	@ExcelProperty(value="微信号",index=0)
+	@KeyWord
 	private String wechatCode;
 	
 	/**
 	 * 客服名称 
 	 */
 	@ExcelProperty(value="客服名称",index=1)
+	@KeyWord
 	private String customName;
 	
 	/**
 	 * 手机号 
 	 */
 	@ExcelProperty(value="手机号",index=2)
+	@KeyWord
 	private String phoneNumber;
 	
 	/**
 	 * QQ号 
 	 */
 	@ExcelProperty(value="QQ号",index=3)
+	@KeyWord
 	private String qqNumber;
 
 	/**
@@ -68,6 +74,7 @@ public class BssWechat extends BaseEntity {
 	 * 下线原因 
 	 */
 	@ExcelProperty(value="下线原因",index=6)
+	@KeyWord
 	private String offlineReason;
 
 	/**
