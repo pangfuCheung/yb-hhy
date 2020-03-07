@@ -51,7 +51,10 @@ public class ShrioConfig {
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/open/**", "anon");
+        filterMap.put("/**.html", "anon");
+        filterMap.put("/bss/bsschannelstatistics/save", "anon");
         filterMap.put("/**", "oauth2");
+
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 
         return shiroFilter;
