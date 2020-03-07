@@ -2,6 +2,7 @@ package com.yb.cheung.common.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.yb.cheung.common.utils.Constant;
 import com.yb.cheung.common.utils.RedisUtils;
@@ -97,7 +98,10 @@ public class ParameterIntercept implements Interceptor {
                 metaObject.setValue("delegate.boundSql.parameterMappings",parameterMappings);
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
-                parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
+                Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
+                if (null == companyId){
+                    parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
+                }
                 metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
             }
 
@@ -109,7 +113,10 @@ public class ParameterIntercept implements Interceptor {
                 metaObject.setValue("delegate.boundSql.parameterMappings",parameterMappings);
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
-                parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_CREATOR_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
+                Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
+                if (null == companyId){
+                    parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
+                }
                 metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
             }
 
@@ -141,7 +148,10 @@ public class ParameterIntercept implements Interceptor {
 
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
-                parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_OPERATOR_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getUuid());
+                Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
+                if (null == companyId){
+                    parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
+                }
                 metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
 
                 Object etObject = metaObject.getValue("delegate.boundSql.parameterObject.et");
