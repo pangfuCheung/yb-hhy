@@ -24,6 +24,11 @@ import com.yb.cheung.common.base.BaseEntity;
 public class BssChannel extends BaseEntity {
 
 	/**
+	 * 渠道编码
+	 */
+	private String channelCode;
+
+	/**
 	 * 是否投放 0：不投放 1投放
 	 */
 	private Integer releaseCode;

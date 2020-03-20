@@ -29,7 +29,7 @@ import com.yb.cheung.common.annotation.YBRequestParam;
  * @email pangfucheung@163.com
  * @date 2019-12-04 12:52:17
  */
-@Api(description = "业务广告信息")
+@Api("业务广告信息")
 @RestController
 @RequestMapping("bss/bssad")
 @Slf4j

@@ -148,7 +148,7 @@ public class ParameterIntercept implements Interceptor {
 
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
-                Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
+                Object companyId = metaObject.getValue("delegate.boundSql.parameterObject.et."+Constant.ENTITY_FIELD_COMPANY_ID);
                 if (null == companyId){
                     parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
                 }
@@ -156,8 +156,10 @@ public class ParameterIntercept implements Interceptor {
 
                 Object etObject = metaObject.getValue("delegate.boundSql.parameterObject.et");
                 MetaObject etObjectMetaObject = SystemMetaObject.forObject(etObject);
-                etObjectMetaObject.setValue(Constant.ENTITY_FIELD_OPERATOR_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getUuid());
-                metaObject.setValue("delegate.boundSql.parameterObject.et",etObject);
+                if (null != SecurityUtils.getSubject().getPrincipal()){
+                    etObjectMetaObject.setValue(Constant.ENTITY_FIELD_OPERATOR_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getUuid());
+                    metaObject.setValue("delegate.boundSql.parameterObject.et",etObject);
+                }
             }
             if (isEixstFieldName(clazz,Constant.ENTITY_FIELD_UPDATE_TIME)){
                 parameterMappings = boundSql.getParameterMappings();

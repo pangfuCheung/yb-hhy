@@ -1,5 +1,6 @@
 package com.yb.cheung.modules.bss.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -18,7 +19,7 @@ import com.yb.cheung.common.base.BaseEntity;
 @Data
 @TableName("bss_channel_statistics")
 public class BssChannelStatistics extends BaseEntity {
-	
+
 	/**
 	 * 渠道id
 	 */
@@ -93,5 +94,17 @@ public class BssChannelStatistics extends BaseEntity {
 	 * 统计类型
 	 */
 	private Integer type;
-	
+
+	/**
+	 * 用户ip
+	 */
+	@TableField(exist = false)
+	private String ipAdress;
+
+	/**
+	 * 渠道编码
+	 */
+	@TableField(exist = false)
+	private String channelCode;
+
 }

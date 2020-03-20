@@ -3,7 +3,14 @@ package com.yb.cheung.modules.bss.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.mchange.lang.IntegerUtils;
 import com.yb.cheung.common.annotation.SysLog;
+import com.yb.cheung.common.utils.IntegerUtil;
+import com.yb.cheung.modules.bss.entity.BssChannel;
+import com.yb.cheung.modules.bss.entity.IpRecord;
+import com.yb.cheung.modules.bss.service.BssChannelService;
+import com.yb.cheung.modules.bss.service.IpRecordService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +45,12 @@ import javax.servlet.http.HttpServletRequest;
 public class BssChannelStatisticsController extends BaseController {
     @Autowired
     private BssChannelStatisticsService bssChannelStatisticsService;
+
+    @Autowired
+    private IpRecordService ipRecordService;
+
+    @Autowired
+    private BssChannelService bssChannelService;
 
     /**
      * 列表
@@ -108,32 +121,68 @@ public class BssChannelStatisticsController extends BaseController {
     @ApiOperation(value = "修改渠道微信号分析统计",httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uuid",value = "主键id" ,required = true , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "channel_id",value = "渠道id" , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "wechat_id",value = "微信id" , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "wechat_code",value = "微信号" , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "brand_id",value = "品牌id" , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "friend_number",value = "好友数量" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "load_number",value = "加载次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "slide_length",value = "滑动长度" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "press_number",value = "长按次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "copy_number",value = "复制次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "qrcode_number",value = "扫二维码次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "click_number",value = "点击次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "skip_wechat_number",value = "跳转微信次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "show_number",value = "轮播次数" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "weight_rate",value = "权重占比" , dataType = "Double" ,paramType = "query"),
-                @ApiImplicitParam(name = "type",value = "统计类型" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "status",value = "状态" , dataType = "Integer" ,paramType = "query"),
-                @ApiImplicitParam(name = "company_id",value = "公司名称" , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "create_time",value = "创建名称" , dataType = "Date" ,paramType = "query"),
-                @ApiImplicitParam(name = "creator_id",value = "创建人id" , dataType = "String" ,paramType = "query"),
-                @ApiImplicitParam(name = "update_time",value = "更新时间" , dataType = "Date" ,paramType = "query"),
-                @ApiImplicitParam(name = "operator_id",value = "更新人id" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "channel_id",value = "渠道id" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "wechat_id",value = "微信id" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "wechat_code",value = "微信号" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "brand_id",value = "品牌id" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "friend_number",value = "好友数量" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "load_number",value = "加载次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "slide_length",value = "滑动长度" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "press_number",value = "长按次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "copy_number",value = "复制次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "qrcode_number",value = "扫二维码次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "click_number",value = "点击次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "skip_wechat_number",value = "跳转微信次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "show_number",value = "轮播次数" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "weight_rate",value = "权重占比" , dataType = "Double" ,paramType = "query"),
+            @ApiImplicitParam(name = "type",value = "统计类型" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "status",value = "状态" , dataType = "Integer" ,paramType = "query"),
+            @ApiImplicitParam(name = "company_id",value = "公司名称" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "create_time",value = "创建名称" , dataType = "Date" ,paramType = "query"),
+            @ApiImplicitParam(name = "creator_id",value = "创建人id" , dataType = "String" ,paramType = "query"),
+            @ApiImplicitParam(name = "update_time",value = "更新时间" , dataType = "Date" ,paramType = "query"),
+            @ApiImplicitParam(name = "operator_id",value = "更新人id" , dataType = "String" ,paramType = "query"),
         })
     @PostMapping("/update")
     @SysLog("修改渠道微信号分析统计")
     public R update(@YBRequestParam BssChannelStatistics bssChannelStatistics){
-		bssChannelStatisticsService.update(bssChannelStatistics);
+        /*QueryWrapper channelWrapper = new QueryWrapper<>();
+        channelWrapper.eq("",bssChannelStatistics.getBrandName());
+        BssChannel bssChannel = bssChannelService.getOne(channelWrapper);*/
+
+        // 先检查ip是否存在，如果存在不算正常粉丝
+        QueryWrapper ipWrapper = new QueryWrapper<>();
+        ipWrapper.eq("ip_adress",bssChannelStatistics.getIpAdress());
+        ipWrapper.eq("channel_code",bssChannelStatistics.getChannelCode());
+        IpRecord ipRecord = ipRecordService.getOne(ipWrapper);
+        if (null == ipRecord){
+            QueryWrapper queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("channel_code",bssChannelStatistics.getChannelCode());
+            queryWrapper.eq("wechat_code",bssChannelStatistics.getWechatCode());
+
+            BssChannelStatistics oldBssChannelStatistics = bssChannelStatisticsService.getOne(queryWrapper);
+            Integer clickNumber = IntegerUtil.getInt(oldBssChannelStatistics.getClickNumber()) + IntegerUtil.getInt(bssChannelStatistics.getClickNumber());
+            if (clickNumber > 0){
+                oldBssChannelStatistics.setClickNumber(clickNumber);
+            }
+
+            Integer slideLength = IntegerUtil.getInt(oldBssChannelStatistics.getSlideLength())+ IntegerUtil.getInt(bssChannelStatistics.getSlideLength());
+            if (slideLength > 0){
+                oldBssChannelStatistics.setSlideLength(slideLength);
+            }
+
+            Integer copyNumber = IntegerUtil.getInt(oldBssChannelStatistics.getCopyNumber()) + IntegerUtil.getInt(bssChannelStatistics.getCopyNumber());
+            if (copyNumber > 0){
+                oldBssChannelStatistics.setCopyNumber(copyNumber);
+            }
+
+            Integer skipWechatNumber = IntegerUtil.getInt(oldBssChannelStatistics.getSkipWechatNumber()) + IntegerUtil.getInt(bssChannelStatistics.getSkipWechatNumber());
+            if (skipWechatNumber > 0){
+                oldBssChannelStatistics.setSkipWechatNumber(skipWechatNumber);
+            }
+
+            bssChannelStatisticsService.update(oldBssChannelStatistics);
+        }
 
         return R.ok();
     }
