@@ -60,7 +60,10 @@ public class BssChannel extends BaseEntity {
 	 * 投放时间 
 	 */
 	private Date releaseTime;
-	
+
+	@TableField(exist = false)
+	private Date[] releaseTimeValue;
+
 	/**
 	 * 品牌备注 
 	 */

@@ -1,6 +1,7 @@
 package com.yb.cheung.modules.bss.entity;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -57,6 +58,12 @@ public class IpRecord implements Serializable {
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
+
+	/**
+	 * 接受前端字段
+	 */
+	@TableField(exist = false)
+	private Date[] createTimeValue;
 
 	/**
 	 * 渠道id

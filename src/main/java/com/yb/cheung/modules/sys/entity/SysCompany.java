@@ -72,6 +72,11 @@ public class SysCompany {
 	private Date createTime;
 
 	/**
+	 * 接收前端临时字段
+	 */
+	private Date[] createTimeValue;
+
+	/**
 	 * 更新人id
 	 */
 	private String operatorId;
@@ -81,4 +86,8 @@ public class SysCompany {
 	 */
 	private Date updateTime;
 
+	/**
+	 * 接收前端临时字段
+	 */
+	private Date[] updateTimeValue;
 }

@@ -1,6 +1,7 @@
 package com.yb.cheung.common.base;
 
 import com.alibaba.excel.annotation.ExcelIgnore;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yb.cheung.common.utils.Constant;
@@ -46,6 +47,12 @@ public class BaseEntity implements Serializable {
     private Date createTime;
 
     /**
+     * 接收前端字段
+     */
+    @TableField(exist = false)
+    private Date[] createTimeValue;
+
+    /**
      * 更新人id
      */
     @ExcelIgnore
@@ -57,5 +64,11 @@ public class BaseEntity implements Serializable {
     @ExcelIgnore
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+    /**
+     * 接收前端字段
+     */
+    @TableField(exist = false)
+    private Date[] updateTimeValue;
 
 }

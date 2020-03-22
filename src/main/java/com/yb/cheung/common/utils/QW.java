@@ -1,6 +1,8 @@
 package com.yb.cheung.common.utils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yb.cheung.common.annotation.KeyWord;
 import com.yb.cheung.common.annotation.QueryCondition;
@@ -8,13 +10,12 @@ import com.yb.cheung.modules.sys.entity.SysRole;
 import com.yb.cheung.modules.sys.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,21 +39,33 @@ public class QW{
             Field fields[] = getAllFields(clazz);
             for (Field field:fields){
                 for (Map.Entry<String,Object> entry:params.entrySet()){
-                    if (entry.getKey().equals(field.getName())){
+                    //由于时间查询是时间段的查询，单独处理
+                    Class timeClazz = field.getType();
+
+                    if (timeClazz != Date[].class && entry.getKey().equals(field.getName())){
                         queryWrapper.eq(humpToLine(field.getName()),entry.getValue());
                         set.add(humpToLine(field.getName()));
+                    } else if (timeClazz == Date.class && entry.getKey().startsWith(field.getName())){
+                        String dateStringValue[] = entry.getValue().toString().replaceAll("\\[","")
+                                .replaceAll("\\]","")
+                                .replaceAll("\"","")
+                                .split(",");
+                        queryWrapper.ge(humpToLine(field.getName()),dateStringValue[0]);
+                        queryWrapper.lt(humpToLine(field.getName()),dateStringValue[1]);
                     }
                 }
             }
 
-            for (Field field:fields){
-                String fieldHumpToLineName = humpToLine(field.getName());
-                if (null != MapUtils.getString(params,"keyWord",null)
-                    && !set.contains(fieldHumpToLineName)
-                ){
-                    Annotation annotation = field.getAnnotation(KeyWord.class);
-                    if (null != annotation ){
-                        queryWrapper.or(true).like(fieldHumpToLineName,params.get("keyWord"));
+            if (islike){
+                for (Field field:fields){
+                    String fieldHumpToLineName = humpToLine(field.getName());
+                    if (null != MapUtils.getString(params,"keyWord",null)
+                            && !set.contains(fieldHumpToLineName)
+                    ){
+                        Annotation annotation = field.getAnnotation(KeyWord.class);
+                        if (null != annotation ){
+                            queryWrapper.or(true).like(fieldHumpToLineName,params.get("keyWord"));
+                        }
                     }
                 }
             }
