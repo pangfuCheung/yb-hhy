@@ -3,6 +3,7 @@ package com.yb.cheung.modules.bss.dao;
 import com.yb.cheung.modules.bss.entity.BssChannel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 业务渠道信息
@@ -13,5 +14,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface BssChannelDao extends BaseMapper<BssChannel> {
-	
+
+
 }

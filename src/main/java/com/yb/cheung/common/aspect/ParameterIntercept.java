@@ -99,7 +99,7 @@ public class ParameterIntercept implements Interceptor {
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
                 Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
-                if (null == companyId){
+                if (null == companyId && null != SecurityUtils.getSubject().getPrincipal()){
                     parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
                 }
                 metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
@@ -114,7 +114,7 @@ public class ParameterIntercept implements Interceptor {
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
                 Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
-                if (null == companyId){
+                if (null == companyId && null != SecurityUtils.getSubject().getPrincipal()){
                     parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
                 }
                 metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
@@ -149,10 +149,11 @@ public class ParameterIntercept implements Interceptor {
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
                 Object companyId = metaObject.getValue("delegate.boundSql.parameterObject.et."+Constant.ENTITY_FIELD_COMPANY_ID);
-                if (null == companyId){
+                if (null == companyId && null != SecurityUtils.getSubject().getPrincipal()){
                     parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
+                    metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
                 }
-                metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
+
 
                 Object etObject = metaObject.getValue("delegate.boundSql.parameterObject.et");
                 MetaObject etObjectMetaObject = SystemMetaObject.forObject(etObject);
@@ -251,6 +252,8 @@ public class ParameterIntercept implements Interceptor {
                 insertSql += " ?, " + sql.substring(sql.lastIndexOf("(")+1,sql.length());
             } else if (sql.indexOf(SqlCommandType.UPDATE.toString()) > -1){
                 parameterMappings.add(parameterMapping.build());
+                int whereIndex = sql.indexOf("WHERE");
+                sql = sql.indexOf(" SET ") > -1? sql : sql.substring(0,whereIndex) + " SET " + sql.substring(whereIndex);
                 insertSql = sql.substring(0,sql.indexOf(Constant.SQL_STR_WHERE));
                 boolean hasUpdateFeild = false;
                 for (ParameterMapping p:parameterMappings){

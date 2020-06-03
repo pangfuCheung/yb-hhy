@@ -19,22 +19,18 @@ import com.yb.cheung.common.base.BaseEntity;
 @TableName("bss_channel_wechat")
 public class BssChannelWechat {
 
-
-	/**
-	 * 
-	 */
 	@TableId
 	private String uuid;
 	
-	/**
-	 * 
-	 */
 	private String channelId;
 	
-	/**
-	 * 
-	 */
 	private String wechatId;
+
+	private Integer weight;
+
+	public BssChannelWechat(){
+
+	}
 
 	public BssChannelWechat(String channelId,String wechatId){
 		this.channelId = channelId;

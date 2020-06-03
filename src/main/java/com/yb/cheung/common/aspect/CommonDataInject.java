@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 
-@Aspect
-@Component
+/*@Aspect
+@Component*/
 @Slf4j
 public class CommonDataInject {
 

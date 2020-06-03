@@ -157,10 +157,23 @@ public class BssChannelStatisticsController extends BaseController {
         IpRecord ipRecord = ipRecordService.getOne(ipWrapper);
         if (null == ipRecord){
             QueryWrapper queryWrapper = new QueryWrapper<>();
+
+            if (null == bssChannelStatistics.getChannelCode()){
+                R.error("渠道编码不能为空");
+            }
+
+            if (null == bssChannelStatistics.getWechatCode()){
+                R.error("微信编码不能为空");
+            }
+
             queryWrapper.eq("channel_code",bssChannelStatistics.getChannelCode());
             queryWrapper.eq("wechat_code",bssChannelStatistics.getWechatCode());
 
             BssChannelStatistics oldBssChannelStatistics = bssChannelStatisticsService.getOne(queryWrapper);
+            if (null == oldBssChannelStatistics){
+                oldBssChannelStatistics = bssChannelStatistics;
+            }
+
             Integer clickNumber = IntegerUtil.getInt(oldBssChannelStatistics.getClickNumber()) + IntegerUtil.getInt(bssChannelStatistics.getClickNumber());
             if (clickNumber > 0){
                 oldBssChannelStatistics.setClickNumber(clickNumber);
@@ -181,7 +194,8 @@ public class BssChannelStatisticsController extends BaseController {
                 oldBssChannelStatistics.setSkipWechatNumber(skipWechatNumber);
             }
 
-            bssChannelStatisticsService.update(oldBssChannelStatistics);
+
+            bssChannelStatisticsService.saveOrUpdate(oldBssChannelStatistics);
         }
 
         return R.ok();

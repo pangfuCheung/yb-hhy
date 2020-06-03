@@ -25,6 +25,7 @@
     <select id="listByBrandId" resultType="com.yb.cheung.modules.bss.entity.BssWechat">
         SELECT
             bw.*
+            ,bcw.weight
         FROM
             bss_wechat_brand bwb
         LEFT JOIN bss_wechat bw ON bw.uuid = bwb.wechat_id
@@ -36,12 +37,25 @@
     <select id="listByChannelId" resultType="com.yb.cheung.modules.bss.entity.BssWechat">
         SELECT
             bw.*
+            ,bcw.weight
         FROM
             bss_channel_wechat bcw
         LEFT JOIN bss_channel bc ON bc.uuid = bcw.channel_id
         LEFT JOIN bss_wechat bw ON bw.uuid = bcw.wechat_id
         WHERE 1=1
         AND bc.uuid = #{channelId}
+    </select>
+
+    <select id="listByChannelCode" resultType="com.yb.cheung.modules.bss.entity.BssWechat">
+        SELECT
+            bw.*
+            ,bcw.weight
+        FROM
+            bss_channel_wechat bcw
+        LEFT JOIN bss_channel bc ON bc.uuid = bcw.channel_id
+        LEFT JOIN bss_wechat bw ON bw.uuid = bcw.wechat_id
+        WHERE 1=1
+        AND bc.channel_code = #{channelCode}
     </select>
 
 

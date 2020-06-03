@@ -91,4 +91,11 @@ public class BssWechat extends BaseEntity {
 	@TableField(exist = false)
 	private String bssBrandName;
 
+	/**
+	 * 品牌微信权重
+	 */
+	@ExcelIgnore
+	@TableField(exist = false)
+	private Integer weight;
+
 }

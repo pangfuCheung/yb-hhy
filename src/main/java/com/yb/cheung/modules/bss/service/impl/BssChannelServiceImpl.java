@@ -6,6 +6,8 @@ import com.yb.cheung.modules.bss.entity.*;
 import com.yb.cheung.modules.bss.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -104,6 +106,21 @@ public class BssChannelServiceImpl extends ServiceImpl<BssChannelDao, BssChannel
     @Override
     @BssMethodLog(remark = "修改业务渠道信息")
     public void update(BssChannel bssChannel) {
+        String channelId = bssChannel.getUuid();
+        List<BssWechat> bssWechatList = bssChannel.getBssWechatList();
+        if (!bssWechatList.isEmpty()){
+            for (BssWechat bssWechat:bssWechatList){
+                Integer weight = bssWechat.getWeight();
+                Map<String,Object> param = new HashMap<>();
+                param.put("wechatId",bssWechat.getUuid());
+                param.put("channelId",channelId);
+
+                BssChannelWechat bssChannelWechat = bssChannelWechatService.getOne(QW.getQW(param,BssChannelWechat.class));
+                bssChannelWechat.setWeight(weight);
+                bssChannelWechatService.updateById(bssChannelWechat);
+            }
+        }
+
         super.updateById(bssChannel);
     }
 

@@ -22,7 +22,7 @@
         <result property="creatorId" column="creator_id"/>
         <result property="updateTime" column="update_time"/>
         <result property="operatorId" column="operator_id"/>
+        <result property="channelCode" column="channel_code"/>
     </resultMap>
-
 
 </mapper>

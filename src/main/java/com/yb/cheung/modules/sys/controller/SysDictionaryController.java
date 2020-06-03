@@ -29,7 +29,7 @@ import com.yb.cheung.common.annotation.YBRequestParam;
  * @email pangfucheung@163.com
  * @date 2020-01-03 14:32:35
  */
-@Api(description = "")
+@Api("")
 @RestController
 @RequestMapping("sys/sysdictionary")
 @Slf4j

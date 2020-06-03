@@ -1,7 +1,6 @@
 package com.yb.cheung.modules.bss.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.sun.corba.se.spi.ior.ObjectKey;
 import com.yb.cheung.common.utils.PageUtils;
 import com.yb.cheung.modules.bss.entity.BssWechat;
 
@@ -92,7 +91,12 @@ public interface BssWechatService extends IService<BssWechat> {
      */
     List<BssWechat> listByChannelId(String channelId);
 
-
+    /**
+     * 根据品牌的code获取微信列表
+     * @param channelId
+     * @return
+     */
+    List<BssWechat> listByChannelCode(String channelId);
 
 }
 

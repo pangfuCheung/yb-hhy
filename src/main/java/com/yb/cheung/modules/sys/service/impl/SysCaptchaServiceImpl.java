@@ -47,6 +47,7 @@ public class SysCaptchaServiceImpl extends ServiceImpl<SysCaptchaDao, SysCaptcha
         }
         //生成文字验证码
         String code = producer.createText();
+        System.out.println(code);
         redisUtils.set(uuid,code,5*60);
         return producer.createImage(code);
     }

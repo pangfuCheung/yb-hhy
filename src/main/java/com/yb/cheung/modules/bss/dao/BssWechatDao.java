@@ -32,4 +32,14 @@ public interface BssWechatDao extends BaseMapper<BssWechat> {
      */
     List<BssWechat> listByChannelId(String channelId);
 
+
+    /**
+     * 根据品牌的code获取微信列表
+     * @param channelId
+     * @return
+     */
+    List<BssWechat> listByChannelCode(String channelId);
+
+
+
 }

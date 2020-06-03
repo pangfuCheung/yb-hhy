@@ -1,6 +1,8 @@
 package com.yb.cheung.common.annotation;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.yb.cheung.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
@@ -160,7 +162,25 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
                         if (field.getName().equals(entry.getKey())){
                             if (field.getType() == String[].class ){
                                 field.set(obj,entry.getValue().toString().split(","));
-                            }else{
+                            } else if (field.getType() == List.class){
+                                Type genericType = field.getGenericType();
+                                if (null == genericType) {
+                                    continue;
+                                }
+
+                                if (genericType instanceof ParameterizedType) {
+                                    ParameterizedType pt = (ParameterizedType) genericType;
+                                    // 得到泛型里的class类型对象
+                                    Class actualTypeArgument = (Class)pt.getActualTypeArguments()[0];
+                                    List<Object> curEleList = new ArrayList<>();
+                                    JSONArray jsonArray = (JSONArray)entry.getValue();
+                                    for (int i=0;i<jsonArray.size();i++){
+                                        JSONObject jsonObject = (JSONObject)jsonArray.get(i);
+                                        curEleList.add(jsonObject.toJavaObject(actualTypeArgument));
+                                    }
+                                    field.set(obj, curEleList);
+                                }
+                            } else {
                                 field.set(obj,entry.getValue());
                             }
                         }

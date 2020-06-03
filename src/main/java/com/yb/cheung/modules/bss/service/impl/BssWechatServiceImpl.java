@@ -160,4 +160,10 @@ public class BssWechatServiceImpl extends ServiceImpl<BssWechatDao, BssWechat> i
     public List<BssWechat> listByChannelId(String channelId) {
         return baseMapper.listByChannelId(channelId);
     }
+
+
+    @Override
+    public List<BssWechat> listByChannelCode(String channelCode) {
+        return baseMapper.listByChannelCode(channelCode);
+    }
 }
