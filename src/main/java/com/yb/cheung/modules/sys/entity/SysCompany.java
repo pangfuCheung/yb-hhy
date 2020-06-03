@@ -74,6 +74,7 @@ public class SysCompany {
 	/**
 	 * 接收前端临时字段
 	 */
+	@TableField(exist = false)
 	private Date[] createTimeValue;
 
 	/**
@@ -89,5 +90,6 @@ public class SysCompany {
 	/**
 	 * 接收前端临时字段
 	 */
+	@TableField(exist = false)
 	private Date[] updateTimeValue;
 }
