@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Api(tags = {"广告测试页接口"})
 @RestController
 @RequestMapping("/open")
 @Slf4j
