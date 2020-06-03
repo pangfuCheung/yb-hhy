@@ -139,13 +139,8 @@ public class ParameterIntercept implements Interceptor {
             String updateSql = oldSql;
             List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
             List<ParameterMapping> myParameterMappings = new ArrayList<>();
-            if (isEixstFieldName(clazz,Constant.ENTITY_FIELD_OPERATOR_ID)){
-                parameterMappings = boundSql.getParameterMappings();
-                ParameterMapping.Builder parameterMapping = new ParameterMapping.Builder(mappedStatement.getConfiguration(),"et." + Constant.ENTITY_FIELD_OPERATOR_ID,String.class);
-                updateSql = dealSqlAndParamter(updateSql,Constant.ENTITY_FIELD_OPERATOR_ID,parameterMappings,parameterMapping);
-                metaObject.setValue("delegate.boundSql.sql", updateSql);
-                metaObject.setValue("delegate.boundSql.parameterMappings",parameterMappings);
 
+            /*if (isEixstFieldName(clazz,Constant.ENTITY_FIELD_COMPANY_ID)){
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
                 MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
                 Object companyId = metaObject.getValue("delegate.boundSql.parameterObject.et."+Constant.ENTITY_FIELD_COMPANY_ID);
@@ -153,7 +148,14 @@ public class ParameterIntercept implements Interceptor {
                     parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
                     metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
                 }
+            }*/
 
+            if (isEixstFieldName(clazz,Constant.ENTITY_FIELD_OPERATOR_ID)){
+                parameterMappings = boundSql.getParameterMappings();
+                ParameterMapping.Builder parameterMapping = new ParameterMapping.Builder(mappedStatement.getConfiguration(),"et." + Constant.ENTITY_FIELD_OPERATOR_ID,String.class);
+                updateSql = dealSqlAndParamter(updateSql,Constant.ENTITY_FIELD_OPERATOR_ID,parameterMappings,parameterMapping);
+                metaObject.setValue("delegate.boundSql.sql", updateSql);
+                metaObject.setValue("delegate.boundSql.parameterMappings",parameterMappings);
 
                 Object etObject = metaObject.getValue("delegate.boundSql.parameterObject.et");
                 MetaObject etObjectMetaObject = SystemMetaObject.forObject(etObject);
@@ -162,6 +164,7 @@ public class ParameterIntercept implements Interceptor {
                     metaObject.setValue("delegate.boundSql.parameterObject.et",etObject);
                 }
             }
+
             if (isEixstFieldName(clazz,Constant.ENTITY_FIELD_UPDATE_TIME)){
                 parameterMappings = boundSql.getParameterMappings();
                 ParameterMapping.Builder parameterMapping = new ParameterMapping.Builder(mappedStatement.getConfiguration(),"et." + Constant.ENTITY_FIELD_UPDATE_TIME,Date.class);
