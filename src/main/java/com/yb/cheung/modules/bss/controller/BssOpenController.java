@@ -8,14 +8,13 @@ import com.yb.cheung.common.utils.IntegerUtil;
 import com.yb.cheung.common.utils.QW;
 import com.yb.cheung.common.utils.R;
 import com.yb.cheung.common.utils.WeightRandom;
-import com.yb.cheung.modules.bss.entity.BssChannelStatistics;
-import com.yb.cheung.modules.bss.entity.BssChannelWechat;
-import com.yb.cheung.modules.bss.entity.BssWechat;
-import com.yb.cheung.modules.bss.entity.IpRecord;
+import com.yb.cheung.modules.bss.entity.*;
 import com.yb.cheung.modules.bss.service.BssChannelStatisticsService;
 import com.yb.cheung.modules.bss.service.BssChannelWechatService;
 import com.yb.cheung.modules.bss.service.BssWechatService;
 import com.yb.cheung.modules.bss.service.IpRecordService;
+import com.yb.cheung.modules.sys.entity.SysUser;
+import com.yb.cheung.modules.sys.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -23,10 +22,12 @@ import io.swagger.annotations.ApiOperation;
 import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,16 +46,24 @@ public class BssOpenController extends BaseController {
     @Autowired
     private BssWechatService bssWechatService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
     /**
      * 根据渠道获取轮询的微信号
      */
     @ApiOperation(value = "根据渠道获取轮询的微信号",httpMethod = "GET")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "channelCode",value = "渠道编码" ,required = true , dataType = "String" ,paramType = "query"),
+        @ApiImplicitParam(name = "account",value = "用户账号" ,required = true , dataType = "String" ,paramType = "query"),
     })
     @GetMapping("/get_wechats")
-    public R delete(HttpServletRequest request,@YBRequestParam String channelCode){
-        List<BssWechat> bssWechatList = bssWechatService.listByChannelCode(channelCode);
+    public R delete(HttpServletRequest request,@YBRequestParam @Validated BssChannel bssChannel){
+        Map<String,Object> userParam = new HashMap<>();
+        userParam.put("account",bssChannel.getAccount());
+        SysUser sysUser = sysUserService.getOne(QW.getQW(userParam,SysUser.class));
+
+        List<BssWechat> bssWechatList = bssWechatService.listByChannelCode(bssChannel.getChannelCode());
 
         List<Pair> pairList = new ArrayList<>();
         for (BssWechat wechat:bssWechatList){

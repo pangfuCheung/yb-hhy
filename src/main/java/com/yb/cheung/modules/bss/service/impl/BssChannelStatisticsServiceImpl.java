@@ -1,6 +1,9 @@
 package com.yb.cheung.modules.bss.service.impl;
 
 import com.yb.cheung.common.utils.QW;
+import com.yb.cheung.modules.bss.entity.BssChannel;
+import com.yb.cheung.modules.bss.service.BssChannelService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +23,24 @@ import com.yb.cheung.modules.bss.service.BssChannelStatisticsService;
 @Service("bssChannelStatisticsService")
 public class BssChannelStatisticsServiceImpl extends ServiceImpl<BssChannelStatisticsDao, BssChannelStatistics> implements BssChannelStatisticsService {
 
+    @Autowired
+    private BssChannelService bssChannelService;
+
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<BssChannelStatistics> page = this.page(
                 new Query<BssChannelStatistics>().getPage(params),
                 QW.getQW(params,BssChannelStatistics.class,true)
         );
+
+        List<BssChannelStatistics> records = page.getRecords();
+        for (BssChannelStatistics statistics:records){
+            String channelId = statistics.getChannelId();
+            if (null != channelId){
+                BssChannel bssChannel =bssChannelService.getById(channelId);
+                statistics.setChannelName(bssChannel.getAdName());
+            }
+        }
 
         return new PageUtils(page);
     }

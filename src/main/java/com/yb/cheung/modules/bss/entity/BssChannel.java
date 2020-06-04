@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.yb.cheung.common.annotation.KeyWord;
+import com.yb.cheung.common.annotation.validate.NotEmpty;
 import lombok.Data;
 import com.yb.cheung.common.base.BaseEntity;
 
@@ -80,6 +81,10 @@ public class BssChannel extends BaseEntity {
 	 */
 	@TableField(exist = false)
 	private String brandId;
+
+	@NotEmpty(message = "用户账号不能为空")
+	@TableField(exist = false)
+	private String account;
 
 	/**
 	 * 品牌名称

@@ -106,4 +106,7 @@ public class BssChannelStatistics extends BaseEntity {
 	@TableField(exist = false)
 	private String channelCode;
 
+	@TableField(exist = false)
+	private String channelName;
+
 }

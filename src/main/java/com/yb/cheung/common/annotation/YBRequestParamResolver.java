@@ -3,12 +3,18 @@ package com.yb.cheung.common.annotation;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.qiniu.util.StringUtils;
+import com.yb.cheung.common.annotation.validate.NotEmpty;
+import com.yb.cheung.common.exception.RRException;
+import com.yb.cheung.common.exception.RRExceptionHandler;
 import com.yb.cheung.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -18,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -150,7 +157,7 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
             }
             return dealLongArray(dealStringArray(request));
         } else {
-            Map<String,Object> map = dealStringMap(request);
+            Map<String,Object> map = dealStringMap(request,nativeWebRequest);
             Type tType = methodParameter.getParameterType();
             Class tClazz = Class.forName(tType.getTypeName());
             Object obj = BeanUtils.instantiateClass(tClazz);
@@ -173,7 +180,14 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
                                     // 得到泛型里的class类型对象
                                     Class actualTypeArgument = (Class)pt.getActualTypeArguments()[0];
                                     List<Object> curEleList = new ArrayList<>();
-                                    JSONArray jsonArray = (JSONArray)entry.getValue();
+
+                                    Class valueClazz = entry.getValue().getClass();
+                                    JSONArray jsonArray = null;
+                                    if (valueClazz == String.class){
+                                        jsonArray = JSONArray.parseArray((String) entry.getValue());
+                                    } else {
+                                        jsonArray = (JSONArray) entry.getValue();
+                                    }
                                     for (int i=0;i<jsonArray.size();i++){
                                         JSONObject jsonObject = (JSONObject)jsonArray.get(i);
                                         curEleList.add(jsonObject.toJavaObject(actualTypeArgument));
@@ -244,6 +258,23 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
                     }
                 }
             }
+
+            if (methodParameter.hasParameterAnnotation(Validated.class)){
+                Field[] declaredFields = obj.getClass().getDeclaredFields();
+                for (Field field:declaredFields){
+                    field.setAccessible(true);
+                    if (field.isAnnotationPresent(NotEmpty.class)){
+                        Object val = field.get(obj);
+                        if (null == val || "".equals(val)){
+                            NotEmpty annotation = field.getAnnotation(NotEmpty.class);
+                            Method value = annotation.annotationType().getDeclaredMethod("message");
+                            value.setAccessible(true);
+                            throw new RRException(value.invoke(annotation).toString());
+                        }
+                    }
+                }
+            }
+
             return obj;
         }
         return null;
@@ -272,7 +303,32 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
     }
 
     private Map<String,Object> dealStringMap(HttpServletRequest request){
-        return JSON.parseObject(ReadAsChars(request));
+        return dealStringMap(request,null);
+    }
+
+    private Map<String,Object> dealStringMap(HttpServletRequest request,NativeWebRequest nativeWebRequest){
+        String requestParamStr = ReadAsChars(request);
+        if (!StringUtils.isNullOrEmpty(requestParamStr)){
+            return JSON.parseObject(ReadAsChars(request));
+        } else if (null != nativeWebRequest){
+            Map<String,Object> paramMap = new HashMap<>();
+            for (Iterator<String> itr = nativeWebRequest.getParameterNames(); itr.hasNext();){
+                String key = itr.next();
+                String[] values = nativeWebRequest.getParameterValues(key);
+                String value = values[0].trim();
+                if(value!=null && !"".equals(value)){//不为空则赋值
+                    paramMap.put(key, value);
+                }
+            }
+            if (paramMap.isEmpty()) {
+                String jsonStr = ReadAsChars(request);
+                if (!"".equals(jsonStr)){
+                    paramMap = JSON.parseObject(jsonStr,Map.class);
+                }
+            }
+            return paramMap;
+        }
+        return null;
     }
 
     private String dealString(HttpServletRequest request){

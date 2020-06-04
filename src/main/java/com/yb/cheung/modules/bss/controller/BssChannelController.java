@@ -3,6 +3,7 @@ package com.yb.cheung.modules.bss.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.yb.cheung.common.annotation.SysLog;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +121,7 @@ public class BssChannelController extends BaseController {
         })
     @PostMapping("/update")
     @SysLog("修改业务渠道信息")
-    public R update(@YBRequestParam BssChannel bssChannel){
+    public R update(@YBRequestParam /*Map<String,Object> param*/ BssChannel bssChannel){
 		bssChannelService.update(bssChannel);
 
         return R.ok();
