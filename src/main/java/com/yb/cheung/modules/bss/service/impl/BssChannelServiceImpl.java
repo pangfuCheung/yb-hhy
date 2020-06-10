@@ -108,7 +108,7 @@ public class BssChannelServiceImpl extends ServiceImpl<BssChannelDao, BssChannel
     public void update(BssChannel bssChannel) {
         String channelId = bssChannel.getUuid();
         List<BssWechat> bssWechatList = bssChannel.getBssWechatList();
-        if (!bssWechatList.isEmpty()){
+        if (null !=bssWechatList && !bssWechatList.isEmpty()){
             for (BssWechat bssWechat:bssWechatList){
                 Integer weight = bssWechat.getWeight();
                 Map<String,Object> param = new HashMap<>();
