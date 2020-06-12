@@ -23,11 +23,11 @@ public interface SysMenuDao extends BaseMapper<SysMenu> {
             "LEFT JOIN sys_role sr ON sr.uuid = srm.menu_id " +
             "LEFT JOIN sys_user_role sur ON sur.role_id = sr.uuid " +
             "LEFT JOIN ( SELECT * FROM sys_user WHERE uuid = #{userId} ) su ON su.uuid = sur.user_id " +
-            "where sur.id IS NOT NULL " +
+            "where sur.uuid IS NOT NULL " +
             "GROUP BY sm.uuid ORDER BY sm.create_time ASC ")
     List<SysMenu> findAllMenuChildrens(String userId);
 
-    @Select("SELECT sm.* FROM sys_menu sm LEFT JOIN sys_role_menu srm ON sm.uuid = srm.menu_id WHERE srm.role_id = #{roleId}")
+    @Select("SELECT sm.* FROM sys_menu sm LEFT JOIN sys_role_menu srm ON sm.uuid = srm.menu_id WHERE srm.role_id = #{roleId} and sm.uuid IS NOT NULL ")
     List<SysMenu> findAllMenusByRoleId(String roleId);
 
     List<SysMenu> findAllMenusByCurrentUser(String userId);
