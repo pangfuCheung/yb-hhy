@@ -1,10 +1,17 @@
 package com.yb.cheung.modules.bss.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.yb.cheung.common.annotation.SysLog;
+import com.yb.cheung.common.utils.QW;
+import com.yb.cheung.modules.bss.entity.BssBrand;
+import com.yb.cheung.modules.bss.entity.BssChannelStatistics;
+import com.yb.cheung.modules.bss.service.BssBrandService;
+import com.yb.cheung.modules.bss.service.BssChannelStatisticsService;
+import com.yb.cheung.modules.bss.service.BssWechatService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,8 +42,18 @@ import com.yb.cheung.common.annotation.YBRequestParam;
 @RequestMapping("bss/bsschannel")
 @Slf4j
 public class BssChannelController extends BaseController {
+
     @Autowired
     private BssChannelService bssChannelService;
+
+    @Autowired
+    private BssWechatService bssWechatService;
+
+    @Autowired
+    private BssBrandService bssBrandService;
+
+    @Autowired
+    private BssChannelStatisticsService bssChannelStatisticsService;
 
     /**
      * 列表
@@ -62,6 +79,18 @@ public class BssChannelController extends BaseController {
     @GetMapping("/info/uuid")
     public R info(@YBRequestParam String uuid){
 		BssChannel bssChannel = bssChannelService.getById(uuid);
+
+		if (null != bssChannel){
+            String channelId = bssChannel.getUuid();
+            bssChannel.setBssWechatList(bssWechatService.listByChannelId(channelId));
+            BssBrand bssBrand = bssBrandService.queryByChannelId(channelId);
+            if (null != bssBrand){
+                bssChannel.setBrandId(bssBrand.getUuid());
+                bssChannel.setBrandName(bssBrand.getName());
+            }
+            List<BssChannelStatistics> bssChannelStatistics = bssChannelStatisticsService.list(QW.getQW("channelId",channelId,BssChannelStatistics.class));
+            bssChannel.setBssChannelStatistics(bssChannelStatistics);
+        }
 
         return R.ok().put("bssChannel", bssChannel);
     }
