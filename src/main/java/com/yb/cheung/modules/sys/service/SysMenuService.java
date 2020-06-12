@@ -23,6 +23,11 @@ public interface SysMenuService extends IService<SysMenu> {
      */
     List<SysMenu> findAllMenuChildrens(String userId);
 
+    /**
+     * 全部菜单
+     * @return
+     */
+    List<SysMenu> findAllMenu();
 
     /**
      * 菜单展示页面接口

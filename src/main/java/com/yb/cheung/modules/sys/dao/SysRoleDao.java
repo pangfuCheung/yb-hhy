@@ -18,7 +18,7 @@ import java.util.List;
 public interface SysRoleDao extends BaseMapper<SysRole> {
 
     @Select(" select sr.* from sys_role sr left join sys_user_role sur on sr.uuid = sur.role_id " +
-            "left join sys_user su on su.uuid = sur.user_id where su.uuid = #{userId} and sr.`code` = 'ROLE_ADMIN'")
+            "left join sys_user su on su.uuid = sur.user_id where su.uuid = #{userId} ")
     List<SysRole> findSysRoleByUserId(String userId);
-	
+
 }

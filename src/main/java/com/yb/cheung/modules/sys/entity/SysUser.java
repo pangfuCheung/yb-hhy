@@ -12,6 +12,8 @@ import com.yb.cheung.common.annotation.KeyWord;
 import lombok.Data;
 import com.yb.cheung.common.base.BaseEntity;
 
+import javax.management.relation.Role;
+
 /**
  * 系统用户信息
  * 
@@ -70,5 +72,8 @@ public class SysUser extends BaseEntity {
 
 	@TableField(exist = false)
 	private String[] roleIds;
+
+	@TableField(exist = false)
+	private List<SysRole> roleList;
 	
 }

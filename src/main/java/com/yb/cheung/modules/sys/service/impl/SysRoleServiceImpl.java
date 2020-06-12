@@ -28,11 +28,18 @@ import com.yb.cheung.modules.sys.service.SysRoleService;
 @Service("sysRoleService")
 public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> implements SysRoleService {
 
+
+
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
 
     @Autowired
     private SysMenuService sysMenuService;
+
+    @Override
+    public List<SysRole> findSysRoleByUserId(String userId) {
+        return baseMapper.findSysRoleByUserId(userId);
+    }
 
     @Override
     public boolean isAdmin(String userId) {
@@ -128,12 +135,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         if (null == sysRole){
             return null;
         }
+        List<SysMenu> menus = sysMenuService.findAllMenu();
         List<SysMenu> allMenus = sysMenuService.findAllMenusByRoleId(sysRole.getUuid());
-        sysRole.setMenuList(allMenus);
-        List<SysMenu> menus = sysMenuService.findAllMenusByUserId(SecurityUtils.getUser().getUuid());
-        String menuIds[] = new String[menus.size()];
+        sysRole.setMenuList(menus);
+        String menuIds[] = new String[allMenus.size()];
         for (int i=0;i<menuIds.length;i++){
-            menuIds[i] = menus.get(i).getUuid();
+            menuIds[i] = allMenus.get(i).getUuid();
         }
         sysRole.setMenuIds(menuIds);
         return sysRole;

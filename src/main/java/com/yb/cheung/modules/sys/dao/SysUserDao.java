@@ -19,5 +19,5 @@ public interface SysUserDao extends BaseMapper<SysUser> {
 
     @Select(" select * from sys_user where 1=1 and company_id = #{companyId}")
     List<SysUser> findUsersByCompanyId(String companyId);
-	
+
 }

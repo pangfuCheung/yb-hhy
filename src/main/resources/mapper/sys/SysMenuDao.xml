@@ -33,6 +33,7 @@
         LEFT JOIN sys_user su ON su.uuid = sur.user_id
         WHERE
           sur.user_id =#{userId}
+
     </select>
 
 </mapper>

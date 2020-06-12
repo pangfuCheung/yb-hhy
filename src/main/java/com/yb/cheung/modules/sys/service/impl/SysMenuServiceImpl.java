@@ -29,6 +29,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
     @Autowired
     private SysRoleService sysRoleService;
 
+
+    @Override
+    public List<SysMenu> findAllMenu() {
+        return setMenus(super.list());
+    }
+
     @Override
     public List<SysMenu> findAllMenuChildrens(String userId) {
         List<SysMenu> allList = baseMapper.findAllMenuChildrens(userId);

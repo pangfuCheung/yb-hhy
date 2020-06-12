@@ -20,6 +20,8 @@ public interface SysRoleService extends IService<SysRole> {
 
     PageUtils queryPage(Map<String, Object> params);
 
+    List<SysRole> findSysRoleByUserId(String userId);
+
 
     /**
      * 更新或者保存

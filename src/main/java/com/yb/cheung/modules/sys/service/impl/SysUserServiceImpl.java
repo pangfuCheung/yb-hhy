@@ -3,8 +3,10 @@ package com.yb.cheung.modules.sys.service.impl;
 import com.qiniu.util.Md5;
 import com.yb.cheung.common.utils.*;
 import com.yb.cheung.modules.sys.entity.SysCompany;
+import com.yb.cheung.modules.sys.entity.SysRole;
 import com.yb.cheung.modules.sys.entity.SysUserRole;
 import com.yb.cheung.modules.sys.service.SysCompanyService;
+import com.yb.cheung.modules.sys.service.SysRoleService;
 import com.yb.cheung.modules.sys.service.SysUserRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     @Autowired
     private SysCompanyService sysCompanyService;
 
+    @Autowired
+    private SysRoleService sysRoleService;
+
     @Override
     public List<SysUser> findUsersByCompanyId(String companyId) {
         return baseMapper.findUsersByCompanyId(companyId);
+    }
+
+    @Override
+    public SysUser findUserById(String userId) {
+        SysUser sysUser = super.getById(userId);
+        List<SysRole> roleList = sysRoleService.findSysRoleByUserId(userId);
+        sysUser.setRoleList(roleList);
+        return sysUser;
     }
 
     @Override

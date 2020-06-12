@@ -63,7 +63,7 @@ public class SysUserController extends BaseController {
     })
     @GetMapping("/info/uuid")
     public R info(@YBRequestParam String uuid){
-		SysUser sysUser = sysUserService.getById(uuid);
+		SysUser sysUser = sysUserService.findUserById(uuid);
 
         return R.ok().put("sysUser", sysUser);
     }

@@ -21,6 +21,13 @@ public interface SysUserService extends IService<SysUser> {
     List<SysUser> findUsersByCompanyId(String companyId);
 
     /**
+     * 
+     * @param userId
+     * @return
+     */
+    SysUser findUserById(String userId);
+
+    /**
      * 更新或者保存
      * @param sysUser
      * @return
