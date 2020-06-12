@@ -70,6 +70,11 @@ public class SysUser extends BaseEntity {
 	 */
 	private String isAdmin;
 
+	/**
+	 * 是否上线
+	 */
+	private String isOnline;
+
 	@TableField(exist = false)
 	private String[] roleIds;
 
