@@ -167,6 +167,8 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
                 if (null != map) {
                     for (Map.Entry<String,Object> entry:map.entrySet()){
                         if (field.getName().equals(entry.getKey())){
+                            String value = (String) entry.getValue();
+
                             if (field.getType() == String[].class ){
                                 field.set(obj,entry.getValue().toString().split(","));
                             } else if (field.getType() == List.class){
@@ -194,7 +196,19 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
                                     }
                                     field.set(obj, curEleList);
                                 }
-                            } else {
+                            } else if (field.getType() == Integer.class){
+                                field.set(obj,Integer.valueOf(value));
+                            } else if (field.getType() == Long.class){
+                                field.set(obj,Long.valueOf(value));
+                            } else if (field.getType() == Float.class){
+                                field.set(obj,Float.valueOf(value));
+                            } else if (field.getType() == Double.class){
+                                field.set(obj,Double.valueOf(value));
+                            } else if (field.getType() == Date.class){
+                                field.set(obj, DateUtils.stringToDate(value,DateUtils.DATE_TIME_PATTERN));
+                            } else if (field.getType() == String[].class){
+                                field.set(obj,value.split(","));
+                            }else {
                                 field.set(obj,entry.getValue());
                             }
                         }
