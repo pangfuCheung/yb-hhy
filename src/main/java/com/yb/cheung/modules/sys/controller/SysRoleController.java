@@ -71,7 +71,7 @@ public class SysRoleController extends BaseController {
     /**
      * 信息
      */
-    @ApiOperation(value = "根据uuid获取系统角色信息",httpMethod = "POST")
+    @ApiOperation(value = "根据uuid获取系统角色信息",httpMethod = "GET")
     @ApiImplicitParams({
         @ApiImplicitParam(name = "uuid",value = "主键id " ,required = true , dataType = "String" ,paramType = "query")
     })
