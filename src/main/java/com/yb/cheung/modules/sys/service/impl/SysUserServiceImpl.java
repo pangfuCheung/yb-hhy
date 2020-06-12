@@ -47,7 +47,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     @Override
     public SysUser findUserById(String userId) {
         SysUser sysUser = super.getById(userId);
-        List<SysRole> roleList = sysRoleService.findSysRoleByUserId(userId);
+        List<SysRole> roles = sysRoleService.findSysRoleByUserId(userId);
+        String roleIds[] = new String[roles.size()];
+        for (int i=0;i<roleIds.length;i++){
+            roleIds[i] = roles.get(i).getUuid();
+        }
+        sysUser.setRoleIds(roleIds);
+        List<SysRole> roleList = sysRoleService.list();
         sysUser.setRoleList(roleList);
         return sysUser;
     }
