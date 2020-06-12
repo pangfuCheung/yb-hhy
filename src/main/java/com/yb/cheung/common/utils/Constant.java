@@ -209,6 +209,10 @@ public class Constant {
     // status key
     public static final String ENTITY_FIELD_STATUS = "status";
 
+    public static final String ENTITY_FIELD_IS_ADMIN_Y = "Y";
+
+    public static final String ENTITY_FIELD_IS_ADMIN_N = "N";
+
     // companyId key
     public static final String ENTITY_FIELD_COMPANY_ID = "companyId";
 

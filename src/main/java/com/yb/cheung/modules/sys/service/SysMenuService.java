@@ -104,6 +104,6 @@ public interface SysMenuService extends IService<SysMenu> {
      * @return
      */
     List<SysMenu> findAllMenusByUserId(String userId);
-    
+
 }
 

@@ -50,6 +50,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -237,6 +238,14 @@
             <artifactId>easyexcel</artifactId>
             <version>2.1.4</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.zhaofujun.nest/nest-ddd -->
+        <dependency>
+            <groupId>com.zhaofujun.nest</groupId>
+            <artifactId>nest-ddd</artifactId>
+            <version>2.0.16</version>
+        </dependency>
+
     </dependencies>
 
     <build>

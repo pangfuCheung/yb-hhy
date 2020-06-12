@@ -1,5 +1,6 @@
 package com.yb.cheung.common.auth;
 
+import com.yb.cheung.modules.sys.entity.SysUser;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -24,5 +25,7 @@ public class JWT implements Serializable {
     private Date expireTime;
     //更新时间
     private Date updateTime;
+    //当前用户信息
+    private SysUser sysUser;
 
 }

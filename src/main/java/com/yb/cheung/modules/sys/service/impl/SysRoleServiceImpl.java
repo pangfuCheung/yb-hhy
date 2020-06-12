@@ -1,8 +1,11 @@
 package com.yb.cheung.modules.sys.service.impl;
 
+import com.yb.cheung.common.auth.SecurityUtils;
 import com.yb.cheung.common.utils.QW;
 import com.yb.cheung.modules.sys.dao.SysRoleMenuDao;
+import com.yb.cheung.modules.sys.entity.SysMenu;
 import com.yb.cheung.modules.sys.entity.SysRoleMenu;
+import com.yb.cheung.modules.sys.service.SysMenuService;
 import com.yb.cheung.modules.sys.service.SysRoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
 
     @Autowired
     private SysRoleMenuService sysRoleMenuService;
+
+    @Autowired
+    private SysMenuService sysMenuService;
 
     @Override
     public boolean isAdmin(String userId) {
@@ -114,5 +120,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
             roleMenus.add(roleMenu);
         }
         sysRoleMenuService.saveBatch(roleMenus);
+    }
+
+    @Override
+    public SysRole getSysRoleById(String uuid) {
+        SysRole sysRole = super.getById(uuid);
+        if (null == sysRole){
+            return null;
+        }
+        List<SysMenu> allMenus = sysMenuService.findAllMenusByRoleId(sysRole.getUuid());
+        sysRole.setMenuList(allMenus);
+        List<SysMenu> menus = sysMenuService.findAllMenusByUserId(SecurityUtils.getUser().getUuid());
+        String menuIds[] = new String[menus.size()];
+        for (int i=0;i<menuIds.length;i++){
+            menuIds[i] = menus.get(i).getUuid();
+        }
+        sysRole.setMenuIds(menuIds);
+        return sysRole;
     }
 }

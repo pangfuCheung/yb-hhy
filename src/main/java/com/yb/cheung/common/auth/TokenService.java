@@ -27,6 +27,10 @@ public class TokenService {
         //生成一个token
         String tokenValue = TokenGenerator.generateValue();
         SysUser sysUser = sysUserService.getById(userId);
+
+        sysUser.setSalt(null);
+        sysUser.setPassword(null);
+
         Date now = new Date();
         //过期时间
         Date expireTime = new Date(now.getTime() + EXPIRE * 1000);
@@ -34,6 +38,7 @@ public class TokenService {
             JWT token = new JWT();
             token.setUserId(sysUser.getUuid());
             token.setToken(tokenValue);
+            token.setSysUser(sysUser);
             token.setExpireTime(expireTime);
             redisUtils.set(tokenValue,token,-1);
             log.info(" ---------- 用户：" + sysUser.getUsername() + " 生成token：" + tokenValue + " --------------");

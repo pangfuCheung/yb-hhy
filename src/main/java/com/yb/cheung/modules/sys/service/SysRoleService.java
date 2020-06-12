@@ -82,5 +82,12 @@ public interface SysRoleService extends IService<SysRole> {
      * @param sysRole
      */
     void allotMenus(SysRole sysRole);
+
+    /**
+     * 根据id获取角色
+     * @param uuid
+     * @return
+     */
+    SysRole getSysRoleById(String uuid);
 }
 

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -48,4 +49,8 @@ public class SysRole extends BaseEntity {
 	
 	@TableField(exist = false)
 	private String[] menuIds;
+
+	@TableField(exist = false)
+	private List<SysMenu> menuList;
+
 }

@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yb.cheung.common.utils.Constant;
+import com.yb.cheung.modules.sys.entity.SysCompany;
+import com.yb.cheung.modules.sys.service.SysCompanyService;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,6 +35,12 @@ public class BaseEntity implements Serializable {
      */
     @ExcelIgnore
     private String companyId;
+
+    /**
+     * 公司名称
+     */
+    @TableField(exist = false)
+    private String companyName;
 
     /**
      * 创建人id

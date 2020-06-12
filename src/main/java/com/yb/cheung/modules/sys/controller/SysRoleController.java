@@ -77,7 +77,7 @@ public class SysRoleController extends BaseController {
     })
     @GetMapping("/info/uuid")
     public R info(@YBRequestParam String uuid){
-		SysRole sysRole = sysRoleService.getById(uuid);
+		SysRole sysRole = sysRoleService.getSysRoleById(uuid);
 
         return R.ok().put("sysRole", sysRole);
     }
@@ -175,7 +175,5 @@ public class SysRoleController extends BaseController {
         sysRoleService.allotMenus(sysRole);
         return R.ok();
     }
-
-
 
 }

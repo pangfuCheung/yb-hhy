@@ -63,6 +63,11 @@ public class SysUser extends BaseEntity {
 	 */
 	private String salt;
 
+	/**
+	 * 是否为管理员用户
+	 */
+	private String isAdmin;
+
 	@TableField(exist = false)
 	private String[] roleIds;
 	

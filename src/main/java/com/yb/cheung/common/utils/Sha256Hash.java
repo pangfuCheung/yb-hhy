@@ -51,14 +51,15 @@ public class Sha256Hash {
         toSHA003("admin");*/
         String salt = Md5.md5(UUID.randomUUID().toString().getBytes());
         System.out.println("salt : " + salt);
-        Sha256Hash sha256Hash = new Sha256Hash("admin",salt);
+        //Sha256Hash sha256Hash = new Sha256Hash("admin",salt);
+        Sha256Hash sha256Hash = new Sha256Hash("123456","aa22e65f5f43c27926ea8bef96e280cf");
         System.out.println(sha256Hash.toHex());
 
-        if ("dfca47c4e7fa6cb8e968ae8a17270dd2685f5c8c80bc116b5f16ed7a3fb5b709".equals(new Sha256Hash("admin","cdb51f61eb93dbf85abc6d98064dc056").toHex())){
+        /*if ("dfca47c4e7fa6cb8e968ae8a17270dd2685f5c8c80bc116b5f16ed7a3fb5b709".equals(new Sha256Hash("admin","cdb51f61eb93dbf85abc6d98064dc056").toHex())){
             System.out.println("校验成功！！！！！");
-        }
+        }*/
 
-        System.out.println(new Sha256Hash("123456",salt).toHex());
+        //System.out.println(new Sha256Hash("123456",salt).toHex());
     }
 
     private void toSHA001(String text) {

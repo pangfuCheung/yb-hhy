@@ -2,7 +2,9 @@ package com.yb.cheung.modules.sys.service.impl;
 
 import com.qiniu.util.Md5;
 import com.yb.cheung.common.utils.*;
+import com.yb.cheung.modules.sys.entity.SysCompany;
 import com.yb.cheung.modules.sys.entity.SysUserRole;
+import com.yb.cheung.modules.sys.service.SysCompanyService;
 import com.yb.cheung.modules.sys.service.SysUserRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     @Autowired
     private SysUserRoleService sysUserRoleService;
 
+    @Autowired
+    private SysCompanyService sysCompanyService;
+
     @Override
     public List<SysUser> findUsersByCompanyId(String companyId) {
         return baseMapper.findUsersByCompanyId(companyId);
@@ -40,6 +45,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
                 new Query<SysUser>().getPage(params),
                 QW.getQW(params,SysUser.class,true)
         );
+        List<SysUser> records = page.getRecords();
+        for (SysUser sysUser:records){
+            SysCompany company = sysCompanyService.getById(sysUser.getCompanyId());
+            if (null != company){
+                sysUser.setCompanyName(company.getName());
+            }
+        }
         return new PageUtils(page);
     }
 
@@ -50,6 +62,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
         Sha256Hash sha256Hash = new Sha256Hash(pwd,salt);
         String sha256Pwd = sha256Hash.toHex();
         sysUser.setPassword(sha256Pwd);
+        sysUser.setSalt(salt);
         save(sysUser);
     }
 
