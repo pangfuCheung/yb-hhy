@@ -78,6 +78,11 @@ public class BssWechat extends BaseEntity {
 	private String offlineReason;
 
 	/**
+	 * 是否上线
+	 */
+	private String isOnline;
+
+	/**
 	 * 品牌id
 	 */
 	@ExcelIgnore
@@ -97,5 +102,7 @@ public class BssWechat extends BaseEntity {
 	@ExcelIgnore
 	@TableField(exist = false)
 	private Integer weight;
+
+
 
 }
