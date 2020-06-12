@@ -75,9 +75,9 @@ public class SysRoleController extends BaseController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "uuid",value = "主键id " ,required = true , dataType = "String" ,paramType = "query")
     })
-    @GetMapping("/info/uuid")
+    @GetMapping("/info")
     public R info(@YBRequestParam String uuid){
-		SysRole sysRole = sysRoleService.getById(uuid);
+		SysRole sysRole = sysRoleService.getSysRoleById(uuid);
 
         return R.ok().put("sysRole", sysRole);
     }

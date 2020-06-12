@@ -94,7 +94,7 @@ public class SysMenuController extends BaseController {
     @ApiImplicitParams({
         @ApiImplicitParam(name = "uuid",value = "主键id " ,required = true , dataType = "String" ,paramType = "query")
     })
-    @GetMapping("/info/uuid")
+    @GetMapping("/info")
     public R info(@YBRequestParam String uuid){
 		SysMenu sysMenu = sysMenuService.getById(uuid);
 
