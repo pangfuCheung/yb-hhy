@@ -121,6 +121,19 @@ public class BssChannelServiceImpl extends ServiceImpl<BssChannelDao, BssChannel
             }
         }
 
+        String wechatCodes[] = bssChannel.getWechatCode().split(",");
+        for (String wechatCode:wechatCodes){
+            Map<String,Object> wparam = new HashMap<>();
+            wparam.put("wechatCode",wechatCode);
+            BssWechat wechat = bssWechatService.getOne(QW.getQW(wparam, BssWechat.class));
+            Map<String,Object> param = new HashMap<>();
+            param.put("wechatId",wechat.getUuid());
+            param.put("channelId",channelId);
+
+            BssChannelWechat bssChannelWechat = bssChannelWechatService.getOne(QW.getQW(param,BssChannelWechat.class));
+            bssChannelWechatService.updateById(bssChannelWechat);
+        }
+
         super.updateById(bssChannel);
     }
 

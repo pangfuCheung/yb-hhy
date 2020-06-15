@@ -112,11 +112,6 @@ public class ParameterIntercept implements Interceptor {
                 metaObject.setValue("delegate.boundSql.sql", insertSql);
                 metaObject.setValue("delegate.boundSql.parameterMappings",parameterMappings);
                 Object parameterObject = metaObject.getValue("delegate.boundSql.parameterObject");
-                MetaObject parameterObjectMetaObject = SystemMetaObject.forObject(parameterObject);
-                Object companyId = parameterObjectMetaObject.getValue(Constant.ENTITY_FIELD_COMPANY_ID);
-                if (null == companyId && null != SecurityUtils.getSubject().getPrincipal()){
-                    parameterObjectMetaObject.setValue(Constant.ENTITY_FIELD_COMPANY_ID, ((SysUser)SecurityUtils.getSubject().getPrincipal()).getCompanyId());
-                }
                 metaObject.setValue("delegate.boundSql.parameterObject",parameterObject);
             }
 
