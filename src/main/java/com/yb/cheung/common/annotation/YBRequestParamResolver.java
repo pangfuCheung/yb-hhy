@@ -112,7 +112,7 @@ public class YBRequestParamResolver implements HandlerMethodArgumentResolver {
             if (paramterName != null){
                 String values[] = nativeWebRequest.getParameterValues(paramterName);
                 if (null != values && values.length > 0){
-                    return values;
+                    return values[0].split(",");
                 }
             }
             return dealStringArray(request);
