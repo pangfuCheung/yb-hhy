@@ -12,10 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -137,12 +134,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
         String roleIds[] = sysUser.getRoleIds();
         List<SysUserRole> userRoles = new ArrayList<>();
         for (int i=0;i<roleIds.length;i++){
-            SysUserRole sysUserRole = new SysUserRole();
-            sysUserRole.setUserId(sysUser.getUuid());
-            sysUserRole.setRoleId(roleIds[i]);
-            userRoles.add(sysUserRole);
+            String userId = sysUser.getUuid();
+            String roleId = roleIds[i];
+
+            Map<String,Object> param = new HashMap<>();
+            param.put("userId",userId);
+            param.put("roleId",roleId);
+            SysUserRole userRole = sysUserRoleService.getOne(QW.getQW(param, SysUserRole.class));
+
+            if (null == userRole){
+                SysUserRole sysUserRole = new SysUserRole();
+                sysUserRole.setUserId(userId);
+                sysUserRole.setRoleId(roleId);
+                userRoles.add(sysUserRole);
+            }
         }
-        sysUserRoleService.saveBatch(userRoles);
+        if (null != userRoles && userRoles.size() > 0){
+            sysUserRoleService.saveBatch(userRoles);
+        }
     }
 
     @Override

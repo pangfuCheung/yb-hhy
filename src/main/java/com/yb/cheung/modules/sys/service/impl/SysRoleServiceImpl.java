@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -122,11 +123,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         List<SysRoleMenu> roleMenus = new ArrayList<>();
         for (int i=0;i<menuIds.length;i++){
             SysRoleMenu roleMenu =  new SysRoleMenu();
-            roleMenu.setRoleId(sysRole.getUuid());
-            roleMenu.setMenuId(menuIds[i]);
-            roleMenus.add(roleMenu);
+            String roleId = sysRole.getUuid();
+            String menuId = menuIds[i];
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(menuId);
+            Map<String,Object> param = new HashMap<>();
+            param.put("roleId",roleId);
+            param.put("menuId",menuId);
+            SysRoleMenu old = sysRoleMenuService.getOne(QW.getQW(param, SysRoleMenu.class));
+            if (null == old){
+                roleMenus.add(roleMenu);
+            }
         }
-        sysRoleMenuService.saveBatch(roleMenus);
+        if (null != roleMenus && roleMenus.size()>0){
+            sysRoleMenuService.saveBatch(roleMenus);
+        }
     }
 
     @Override
@@ -135,12 +146,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         if (null == sysRole){
             return null;
         }
-        List<SysMenu> menus = sysMenuService.findAllMenu();
-        List<SysMenu> allMenus = sysMenuService.findAllMenusByRoleId(sysRole.getUuid());
-        sysRole.setMenuList(menus);
-        String menuIds[] = new String[allMenus.size()];
+        List<SysMenu> allMenus = sysMenuService.findAllMenu();
+        List<SysMenu> menus = sysMenuService.findAllMenusByRoleId(sysRole.getUuid());
+        sysRole.setMenuList(allMenus);
+        String menuIds[] = new String[menus.size()];
         for (int i=0;i<menuIds.length;i++){
-            menuIds[i] = allMenus.get(i).getUuid();
+            menuIds[i] = menus.get(i).getUuid();
         }
         sysRole.setMenuIds(menuIds);
         return sysRole;

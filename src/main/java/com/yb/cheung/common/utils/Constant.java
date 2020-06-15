@@ -197,6 +197,9 @@ public class Constant {
     //查询标识
     public static final String SQL_STR_WHERE = "WHERE";
 
+    public static final String SQL_STR_COMPANY_ID = "company_id";
+
+
     // 获取companyId方法名
     public static final String ENTITY_METHOD_GET_COMPANY_ID = "getCompanyId";
 

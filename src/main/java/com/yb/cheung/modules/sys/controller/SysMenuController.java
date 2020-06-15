@@ -197,7 +197,7 @@ public class SysMenuController extends BaseController {
     @PostMapping("/menus_role_id")
     @SysLog("根据角色id获取menu")
     public R getMenuByRoleId(@YBRequestParam String roleId){
-        return R.ok(sysMenuService.findAllMenusByRoleId(roleId));
+        return R.ok(sysMenuService.findAllMenuTreeByRoleId(roleId));
     }
 
 }

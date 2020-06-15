@@ -37,15 +37,16 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 
     @Override
     public List<SysMenu> findAllMenuChildrens(String userId) {
-        List<SysMenu> allList = baseMapper.findAllMenuChildrens(userId);
         boolean isAdmin = sysRoleService.isAdmin(userId);
+        List<SysMenu> allList = null;
+        if (!isAdmin){
+            allList = baseMapper.findAllMenuChildrens(userId);
+        } else {
+            allList = super.list();
+        }
         List<SysMenu> allMenus = new ArrayList<>();
         for (SysMenu sysMenu:allList){
-            if (isAdmin && null != sysMenu.getStatus() && sysMenu.getStatus() != Constant.ENTITY_STATUS_DELETE){
-                allMenus.add(sysMenu);
-            }else if (null != sysMenu.getStatus() && sysMenu.getStatus() == Constant.ENTITY_STATUS_VALID){
-                allMenus.add(sysMenu);
-            }
+            allMenus.add(sysMenu);
         }
 
         List<SysMenu> allParents = new ArrayList<>();
@@ -167,6 +168,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 
     @Override
     public List<SysMenu> findAllMenusByRoleId(String roleId) {
+        return baseMapper.findAllMenusByRoleId(roleId);
+    }
+
+    @Override
+    public List<SysMenu> findAllMenuTreeByRoleId(String roleId) {
         return setMenus(baseMapper.findAllMenusByRoleId(roleId));
     }
 

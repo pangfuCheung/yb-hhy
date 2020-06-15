@@ -105,6 +105,13 @@ public interface SysMenuService extends IService<SysMenu> {
     List<SysMenu> findAllMenusByRoleId(String roleId);
 
     /**
+     * 根据角色id获取menu
+     * @param roleId
+     * @return
+     */
+    List<SysMenu> findAllMenuTreeByRoleId(String roleId);
+
+    /**
      * 校验权限，直接获取当前用户的所有permission
      * @return
      */
