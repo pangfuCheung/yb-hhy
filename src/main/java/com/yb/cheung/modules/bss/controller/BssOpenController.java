@@ -1,5 +1,8 @@
 package com.yb.cheung.modules.bss.controller;
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yb.cheung.common.annotation.SysLog;
 import com.yb.cheung.common.annotation.YBRequestParam;
@@ -26,6 +29,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -157,4 +163,14 @@ public class BssOpenController extends BaseController {
 
         return R.ok();
     }
+
+    @RequestMapping("/search_ip")
+    public String searchIP(HttpServletRequest request){
+        String clientIP = HttpUtil.getClientIP(request, null);
+        HttpRequest httpRequest = HttpUtil.createGet("http://ip.ws.126.net/ipquery?ip=" + clientIP);
+        HttpResponse httpResponse = httpRequest.execute();
+        String body = httpResponse.charset("GBK").body();
+        return body;
+    }
+
 }
