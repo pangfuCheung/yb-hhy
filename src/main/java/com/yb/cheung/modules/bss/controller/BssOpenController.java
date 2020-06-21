@@ -3,7 +3,15 @@ package com.yb.cheung.modules.bss.controller;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.exceptions.ClientException;
+import com.aliyuncs.exceptions.ServerException;
+import com.aliyuncs.geoip.model.v20200101.DescribeIpv4LocationRequest;
+import com.aliyuncs.geoip.model.v20200101.DescribeIpv4LocationResponse;
+import com.aliyuncs.profile.DefaultProfile;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.gson.Gson;
 import com.yb.cheung.common.annotation.SysLog;
 import com.yb.cheung.common.annotation.YBRequestParam;
 import com.yb.cheung.common.base.BaseController;
@@ -166,11 +174,30 @@ public class BssOpenController extends BaseController {
 
     @RequestMapping("/search_ip")
     public String searchIP(HttpServletRequest request){
-        String clientIP = HttpUtil.getClientIP(request, null);
+        /*String clientIP = HttpUtil.getClientIP(request, null);
         HttpRequest httpRequest = HttpUtil.createGet("http://ip.ws.126.net/ipquery?ip=" + clientIP);
         HttpResponse httpResponse = httpRequest.execute();
-        String body = httpResponse.charset("GBK").body();
-        return body;
+        String body = httpResponse.charset("GBK").body();*/
+        String clientIP = HttpUtil.getClientIP(request, null);
+
+        DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4G84Jy3WtzJoNhqcRoW1", "bxsWjJoJyhwXYyXsAu0ug1yMtWaKKR");
+        IAcsClient client = new DefaultAcsClient(profile);
+
+        DescribeIpv4LocationRequest ipv4LocationRequest = new DescribeIpv4LocationRequest();
+        ipv4LocationRequest.setIp(clientIP);
+        try {
+            DescribeIpv4LocationResponse response = client.getAcsResponse(ipv4LocationRequest);
+            System.out.println(new Gson().toJson(response));
+            return new Gson().toJson(response);
+        } catch (ServerException e) {
+            e.printStackTrace();
+            return "程序异常";
+        } catch (ClientException e) {
+            System.out.println("ErrCode:" + e.getErrCode());
+            System.out.println("ErrMsg:" + e.getErrMsg());
+            System.out.println("RequestId:" + e.getRequestId());
+            return "程序异常";
+        }
     }
 
 }
