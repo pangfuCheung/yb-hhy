@@ -3,6 +3,7 @@ package com.yb.cheung.modules.bss.controller;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
@@ -198,6 +199,11 @@ public class BssOpenController extends BaseController {
             System.out.println("RequestId:" + e.getRequestId());
             return "程序异常";
         }
+    }
+
+    @RequestMapping("/call_back")
+    public String callBack(HttpServletRequest request){
+        return JSON.toJSONString(System.currentTimeMillis());
     }
 
 }
